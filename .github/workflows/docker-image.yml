@@ -35,7 +35,7 @@ jobs:
           docker build -t ${{ env.ACR_URL }}/samples/react-app:latest ./APP
           docker push ${{ env.ACR_URL }}/samples/react-app:latest
 
-      - name: Build and push API image
+      - name: Build and push API image 
         run: |
           docker build -t ${{ env.ACR_URL }}/samples/demok8sapi:latest ./API
           docker push ${{ env.ACR_URL }}/samples/demok8sapi:latest
