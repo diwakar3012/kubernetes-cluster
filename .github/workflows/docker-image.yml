@@ -31,9 +31,4 @@ jobs:
       - name: Build and push API image
         run: |
           docker build -t ${{ env.ACR_URL }}/api:latest ./api
-          docker push ${{ env.ACR_URL }}/api:latest
-
-      - name: Build and push service image
-        run: |
-          docker build -t ${{ env.ACR_URL }}/service:latest ./service
-          docker push ${{ env.ACR_URL }}/service:latest
+          docker push ${{ env.ACR_URL }}/api:latest 
