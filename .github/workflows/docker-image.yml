@@ -22,8 +22,8 @@ jobs:
 
       - name: Log in to Azure Container Registry
         run: |
-          echo "Azure Client ID: ${AZURE_CLIENT_ID:0:4}..."
-          echo "Azure Tenant ID: ${AZURE_TENANT_ID:0:4}..."
+          echo "Azure Client ID: ${secrets.AZURE_CLIENT_ID:0:4}..."
+          echo "Azure Tenant ID: ${secrets.AZURE_TENANT_ID:0:4}..."
           az login --service-principal \
             --username ${{ secrets.AZURE_CLIENT_ID }} \
             --password ${{ secrets.AZURE_CLIENT_SECRET }} \
@@ -32,10 +32,10 @@ jobs:
 
       - name: Build and push frontend image
         run: |
-          docker build -t ${{ env.ACR_URL }}/frontend:latest ./frontend
-          docker push ${{ env.ACR_URL }}/frontend:latest
+          docker build -t ${{ env.ACR_URL }}/samples/react-app:latest ./APP
+          docker push ${{ env.ACR_URL }}/samples/react-app:latest
 
       - name: Build and push API image
         run: |
-          docker build -t ${{ env.ACR_URL }}/api:latest ./api
-          docker push ${{ env.ACR_URL }}/api:latest
+          docker build -t ${{ env.ACR_URL }}/samples/demok8sapi:latest ./API
+          docker push ${{ env.ACR_URL }}/samples/demok8sapi:latest
