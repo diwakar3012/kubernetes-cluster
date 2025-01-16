@@ -50,7 +50,10 @@ jobs:
             --username ${{ secrets.AZURE_CLIENT_ID }} \
             --password ${{ secrets.AZURE_CLIENT_SECRET }} \
             --tenant ${{ secrets.AZURE_TENANT_ID }}
+          echo Login success 
+          echo iniated
           az acr login --name ${{ env.ACR_NAME }}
+          echo success
           
       - name: Build and push frontend image
         run: |
