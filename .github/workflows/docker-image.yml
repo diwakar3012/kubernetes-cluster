@@ -1,9 +1,9 @@
 name: Build and Push Images
 
 on: 
-  workflow_dispatch: 
-  push:
-    - main
+  push: 
+    branches:
+      - main
 
 jobs:
   build-and-push: 
