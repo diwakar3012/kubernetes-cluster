@@ -30,10 +30,12 @@ jobs:
 
       - name: Build and push frontend image
         run: |
-          docker build -t ${{ env.ACR_URL }}/react-app:latest ./APP
-          docker push ${{ env.ACR_URL }}react-app:latest
+          LOWER_ACR_URL=$(echo "${{ env.ACR_URL }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t ${LOWER_ACR_URL}/react-app:latest ./APP
+          docker push ${LOWER_ACR_URL}/react-app:latest
 
       - name: Build and push API image 
         run: |
-          docker build -t ${{ env.ACR_URL }}/demok8sapi:latest ./API
-          docker push ${{ env.ACR_URL }}/demok8sapi:latest
+          LOWER_ACR_URL=$(echo "${{ env.ACR_URL }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t ${LOWER_ACR_URL}/demok8sapi:latest ./API
+          docker push ${LOWER_ACR_URL}/demok8sapi:latest
