@@ -1,0 +1,58 @@
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: practice-kubernetes
+
+---
+
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-service
+  namespace: practice-kubernetes
+  labels:
+    app: app-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-service
+  template:
+    metadata:
+      labels:
+        app: app-service
+    spec:
+      nodeSelector:
+        type: worker1
+      containers:
+      - name: app-container
+        # image: myfirstcontainerdemo.azurecr.io/react-app:latest
+        image: myfirstcontainerdemo.azurecr.io/react-app:<IMAGE_TAG>
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+
+---
+
+# Expose
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-expose
+  namespace: practice-kubernetes
+spec:
+  selector:
+    app: app-service
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
