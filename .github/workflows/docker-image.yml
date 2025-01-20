@@ -38,12 +38,11 @@ jobs:
       
           echo "Logged in successfully!"
 
-      - name: Get Kubernetes credentials
-        run: |
-          az aks get-credentials \
-            --resource-group DemoEG \
-            --name EGClusterTest \
-            --overwrite-existing
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: EGClusterTest
+          resource-group: DemoEG
 
       - uses: Azure/k8s-create-secret@v1
         with:
@@ -100,13 +99,12 @@ jobs:
           az acr show --name ${{ env.ACR_NAME }} --query "loginServer" --output tsv
       
           echo "Logged in successfully!"
-        
-      - name: Get Kubernetes credentials
-        run: |
-          az aks get-credentials \
-            --resource-group DemoEG \
-            --name EGClusterTest \
-            --overwrite-existing
+
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: EGClusterTest
+          resource-group: DemoEG
 
       - name: Build and push APP image
         run: |
