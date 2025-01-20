@@ -35,6 +35,6 @@ spec:
     app: app-service
   ports:
   - protocol: TCP
-    port: 80  # Expose the service on port 80
+    port: 8081  # Expose the service on port 80
     targetPort: 80  # Map to the container's port 80
   type: LoadBalancer
