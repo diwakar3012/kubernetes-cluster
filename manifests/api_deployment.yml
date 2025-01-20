@@ -21,7 +21,7 @@ spec:
         - name: api-container
           image: myfirstcontainerdemo.azurecr.io/demok8sapi:v_${{github.run_number}}
           ports:
-            - containerPort: 8080
+            - containerPort: 80
 
 ---
 
@@ -35,6 +35,6 @@ spec:
     app: api-service
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 80
+    targetPort: 80
   type: LoadBalancer

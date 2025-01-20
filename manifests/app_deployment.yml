@@ -21,7 +21,7 @@ spec:
         - name: app-container
           image: myfirstcontainerdemo.azurecr.io/react-app:v_${{github.run_number}}
           ports:
-            - containerPort: 8081 
+            - containerPort: 80
 
 ---
 
@@ -35,6 +35,6 @@ spec:
     app: app-service
   ports:
   - protocol: TCP
-    port: 8081  # Expose the service on port 80
-    targetPort: 8081  # Map to the container's port 80
+    port: 81  # Expose the service on port 80
+    targetPort: 80  # Map to the container's port 80
   type: LoadBalancer
