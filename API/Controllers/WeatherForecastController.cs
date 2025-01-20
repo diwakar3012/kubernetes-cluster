@@ -29,5 +29,12 @@ namespace DemoK8sAPI.Controllers
             })
             .ToArray();
         }
+        
+        [HttpGet(Name = "GetCurrentTime")]
+        public string DoReturnDateTime()
+        {
+            return DateTime.Now.ToString("dd-MMM-yyyy");
+        }
+
     }
 }
