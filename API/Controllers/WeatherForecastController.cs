@@ -29,9 +29,11 @@ namespace DemoK8sAPI.Controllers
             })
             .ToArray();
         }
-        
-        [HttpGet(Name = "GetCurrentTime")]
-        public string DoReturnDateTime()
+
+        [HttpGet]
+        [Route("DoGetCurrentDate")]
+        //[Authorize]
+        public async Task<string> DoGetCurrentDate()
         {
             return DateTime.Now.ToString("dd-MMM-yyyy");
         }
