@@ -7,6 +7,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "DemoK8sAPI",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
+});
+
+
 // Disable HTTPS redirection
 //builder.Services.AddHttpsRedirection(options =>
 //{
@@ -21,7 +32,7 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
-
+app.UseCors("DemoK8sAPI");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

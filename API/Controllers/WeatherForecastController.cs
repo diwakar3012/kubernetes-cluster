@@ -1,4 +1,7 @@
+using EGDaySchedule.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 
 namespace DemoK8sAPI.Controllers
 {
@@ -12,10 +15,11 @@ namespace DemoK8sAPI.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly IConfiguration _configuration;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -38,5 +42,21 @@ namespace DemoK8sAPI.Controllers
             return DateTime.Now.ToString("dd-MMM-yyyy");
         }
 
+        [HttpGet]
+        [Route("DoGetUserData")]
+        //[Authorize]
+        public async Task<APIResponseData> DoGetUsersDataFromMongoDB()
+        {
+            APIResponseData obj = new APIResponseData();
+            var Db = DBContext.MongoDBConnection(_configuration);
+            var UsersCollection = Db.GetCollection<Users>("Users");
+            var filter1 = Builders<Users>.Filter.Empty;
+            var users_data =await UsersCollection.Find(filter1).ToListAsync();
+            obj.data = users_data;
+            obj.responseTime = DateTime.Now;
+            obj.status = "Success";
+            return obj;
+
+        }
     }
 }
