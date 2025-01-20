@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "k9/DRr2POK68F8ZJL5iVs+Yuph4fiLqJPJvpRsvKUB4=",
+  "Source": "DemoK8sAPI",
+  "BasePath": "_content/DemoK8sAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
