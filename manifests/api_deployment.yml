@@ -1,17 +1,8 @@
-# Namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: practice-kubernetes
-
----
-
 # Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-service
-  namespace: practice-kubernetes
   labels:
     app: api-service
 spec:
@@ -31,14 +22,14 @@ spec:
         # image: myfirstcontainerdemo.azurecr.io/demok8sapi:latest
         image: myfirstcontainerdemo.azurecr.io/demok8sapi:<IMAGE_TAG>
         ports:
-        - containerPort: 8080
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "256Mi"
-          limits:
-            cpu: "1"
-            memory: "512Mi"
+        - containerPort: 80
+        # resources:
+        #   requests:
+        #     cpu: "500m"
+        #     memory: "256Mi"
+        #   limits:
+        #     cpu: "1"
+        #     memory: "512Mi"
 
 ---
 
@@ -47,12 +38,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: api-expose
-  namespace: practice-kubernetes
 spec:
   selector:
     app: api-service
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 80
+    targetPort: 80
   type: LoadBalancer

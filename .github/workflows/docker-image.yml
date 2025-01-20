@@ -45,6 +45,13 @@ jobs:
             --name EGClusterTest \
             --overwrite-existing
 
+      - uses: Azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ secrets.ACR_NAME }}
+          container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
+          container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          secret-name: myregistry-secret
+
       - name: Build and push API image
         run: |
           docker build -t ${{ env.ACR_URL }}/demok8sapi:v_${{ github.run_number }} ./API
@@ -54,9 +61,18 @@ jobs:
         run: |
           sed -i "s|<IMAGE_TAG>|v_${{ github.run_number }}|g" manifests/api_deployment.yml
           
-      - name: Deploy API to AKS
-        run: |
-          kubectl apply -f manifests/api_deployment.yml
+      # - name: Deploy API to AKS
+      #   run: |
+      #     kubectl apply -f manifests/api_deployment.yml
+
+      - uses: Azure/k8s-deploy@v1
+        with:
+          manifests: |
+            manifests/api_deployment.yml
+          images: |
+            ${{ env.ACR_URL }}/demok8sapi:v_${{ github.run_number }}
+          imagepullsecrets: |
+            myregistry-secret
 
   build-and-push-app:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.commits.*.modified, 'main/app') || contains(github.event.commits.*.modified, 'main/manifests')
@@ -97,10 +113,26 @@ jobs:
           docker build -t ${{ env.ACR_URL }}/react-app:v_${{ github.run_number }} ./APP
           docker push ${{ env.ACR_URL }}/react-app:v_${{ github.run_number }}
 
+      - uses: Azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ secrets.ACR_NAME }}
+          container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
+          container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          secret-name: myregistry-secret
+
       - name: Update App Deployment YAML
         run: |
           sed -i "s|<IMAGE_TAG>|v_${{ github.run_number }}|g" manifests/app_deployment.yml
 
-      - name: Deploy App to AKS
-        run: |
-          kubectl apply -f manifests/app_deployment.yml
+      # - name: Deploy App to AKS
+      #   run: |
+      #     kubectl apply -f manifests/app_deployment.yml
+
+      - uses: Azure/k8s-deploy@v1
+        with:
+          manifests: |
+            manifests/app_deployment.yml
+          images: |
+            ${{ env.ACR_URL }}/react-app:v_${{ github.run_number }}
+          imagepullsecrets: |
+            myregistry-secret

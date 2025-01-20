@@ -1,17 +1,8 @@
-# Namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: practice-kubernetes
-
----
-
 # Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-service
-  namespace: practice-kubernetes
   labels:
     app: app-service
 spec:
@@ -28,18 +19,17 @@ spec:
         type: worker1
       containers:
       - name: app-container
-        # image: myfirstcontainerdemo.azurecr.io/react-app:latest
+        # image: myfirstcontainerdemo.azurecr.io/react-app:v_17
         image: myfirstcontainerdemo.azurecr.io/react-app:<IMAGE_TAG>
         ports:
-        - containerPort: 8080
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "256Mi"
-          limits:
-            cpu: "1"
-            memory: "512Mi"
-
+        - containerPort: 80  # Expose port 80, matching Nginx's port
+        # resources:
+        #   requests:
+        #     cpu: "500m"
+        #     memory: "256Mi"
+        #   limits:
+        #     cpu: "1"
+        #     memory: "512Mi"
 ---
 
 # Expose
@@ -47,12 +37,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-expose
-  namespace: practice-kubernetes
 spec:
   selector:
     app: app-service
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 80  # Expose the service on port 80
+    targetPort: 80  # Map to the container's port 80
   type: LoadBalancer
