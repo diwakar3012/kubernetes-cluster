@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'main/api/**'
-      - 'main/app/**'
+      - 'main/APP/**'
+      - 'main/API/**'
       - 'main/manifests/**'
   workflow_dispatch:
 
