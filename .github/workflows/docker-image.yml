@@ -56,7 +56,7 @@ jobs:
           
       - name: Deploy API to AKS
         run: |
-          kubectl apply -f manifests/api_deployment.yaml
+          kubectl apply -f manifests/api_deployment.yml
 
   build-and-push-app:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.commits.*.modified, 'main/app') || contains(github.event.commits.*.modified, 'main/manifests')
@@ -103,4 +103,4 @@ jobs:
 
       - name: Deploy App to AKS
         run: |
-          kubectl apply -f manifests/app_deployment.yaml
+          kubectl apply -f manifests/app_deployment.yml
