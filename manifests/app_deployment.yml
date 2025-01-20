@@ -6,7 +6,7 @@ metadata:
   labels:
     app: app-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: app-service
@@ -18,18 +18,14 @@ spec:
       nodeSelector:
         type: worker1
       containers:
-      - name: app-container
-        # image: myfirstcontainerdemo.azurecr.io/react-app:v_17
-        image: myfirstcontainerdemo.azurecr.io/react-app:<IMAGE_TAG>
-        ports:
-        - containerPort: 80  # Expose port 80, matching Nginx's port
-        # resources:
-        #   requests:
-        #     cpu: "500m"
-        #     memory: "256Mi"
-        #   limits:
-        #     cpu: "1"
-        #     memory: "512Mi"
+        - name: app-container
+          image: myfirstcontainerdemo.azurecr.io/react-app:<IMAGE_TAG>
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: myregistry-secret
+
+
 ---
 
 # Expose

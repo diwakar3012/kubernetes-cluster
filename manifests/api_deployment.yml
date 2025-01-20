@@ -6,7 +6,7 @@ metadata:
   labels:
     app: api-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api-service
@@ -18,18 +18,12 @@ spec:
       nodeSelector:
         type: worker1
       containers:
-      - name: api-container
-        # image: myfirstcontainerdemo.azurecr.io/demok8sapi:latest
-        image: myfirstcontainerdemo.azurecr.io/demok8sapi:<IMAGE_TAG>
-        ports:
-        - containerPort: 80
-        # resources:
-        #   requests:
-        #     cpu: "500m"
-        #     memory: "256Mi"
-        #   limits:
-        #     cpu: "1"
-        #     memory: "512Mi"
+        - name: api-container
+          image: myfirstcontainerdemo.azurecr.io/demok8sapi:<IMAGE_TAG>
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: myregistry-secret
 
 ---
 
