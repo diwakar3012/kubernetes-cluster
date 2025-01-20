@@ -1,14 +1,14 @@
 name: Build and Push Docker Images
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - 'main/APP/**'
-      - 'main/API/**'
-      - 'main/manifests/**'
-  workflow_dispatch:
+      - main/APP/**
+      - main/API/**
+      - main/manifests/**
 
 jobs:
   build-and-push-api:
