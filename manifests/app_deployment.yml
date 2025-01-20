@@ -19,12 +19,9 @@ spec:
         type: worker1
       containers:
         - name: app-container
-          image: myfirstcontainerdemo.azurecr.io/react-app:<IMAGE_TAG>
+          image: myfirstcontainerdemo.azurecr.io/react-app:v_${{github.run_number}}
           ports:
-            - containerPort: 80
-      imagePullSecrets:
-        - name: myregistry-secret
-
+            - containerPort: 80 
 
 ---
 

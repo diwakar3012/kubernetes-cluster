@@ -14,123 +14,79 @@ jobs:
   build-and-push-api:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.commits.*.modified, 'main/api') || contains(github.event.commits.*.modified, 'main/manifests')
     runs-on: ubuntu-latest
-    env:
-      ACR_NAME: ${{ secrets.ACR_NAME }}
-      ACR_URL: ${{ secrets.ACR_NAME }}.azurecr.io
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Log in to Azure and ACR
-        run: |
-          echo "Logging into Azure..."
-          az login --service-principal \
-            --username ${{ secrets.AZURE_CLIENT_ID }} \
-            --password ${{ secrets.AZURE_CLIENT_SECRET }} \
-            --tenant ${{ secrets.AZURE_TENANT_ID }}
-      
-          echo "Logging into ACR: ${{ env.ACR_NAME }}..."
-          az acr login --name ${{ env.ACR_NAME }}
-      
-          echo "Validating ACR access..."
-          az acr show --name ${{ env.ACR_NAME }} --query "loginServer" --output tsv
-      
-          echo "Logged in successfully!"
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_NAME }}
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - run: |
+            docker build -t ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }} ./API
+            docker push ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
 
+       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
           cluster-name: EGClusterTest
           resource-group: DemoEG
-
+          
       - uses: Azure/k8s-create-secret@v1
         with:
           container-registry-url: ${{ secrets.ACR_NAME }}
           container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
           container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
-          secret-name: myregistry-secret
-
-      - name: Build and push API image
-        run: |
-          docker build -t ${{ env.ACR_URL }}/demok8sapi:v_${{ github.run_number }} ./API
-          docker push ${{ env.ACR_URL }}/demok8sapi:v_${{ github.run_number }}
-          
-      - name: Update Deployment YAML
-        run: |
-          sed -i "s|<IMAGE_TAG>|v_${{ github.run_number }}|g" manifests/api_deployment.yml
-          
-      # - name: Deploy API to AKS
-      #   run: |
-      #     kubectl apply -f manifests/api_deployment.yml
+          secret-name: my-secret
 
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
             manifests/api_deployment.yml
           images: |
-            ${{ env.ACR_URL }}/demok8sapi:v_${{ github.run_number }}
+            ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
           imagepullsecrets: |
-            myregistry-secret
+            my-secret
 
   build-and-push-app:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.commits.*.modified, 'main/app') || contains(github.event.commits.*.modified, 'main/manifests')
     runs-on: ubuntu-latest
-    env:
-      ACR_NAME: ${{ secrets.ACR_NAME }}
-      ACR_URL: ${{ secrets.ACR_NAME }}.azurecr.io
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Log in to Azure and ACR
-        run: |
-          echo "Logging into Azure..."
-          az login --service-principal \
-            --username ${{ secrets.AZURE_CLIENT_ID }} \
-            --password ${{ secrets.AZURE_CLIENT_SECRET }} \
-            --tenant ${{ secrets.AZURE_TENANT_ID }}
-      
-          echo "Logging into ACR: ${{ env.ACR_NAME }}..."
-          az acr login --name ${{ env.ACR_NAME }}
-      
-          echo "Validating ACR access..."
-          az acr show --name ${{ env.ACR_NAME }} --query "loginServer" --output tsv
-      
-          echo "Logged in successfully!"
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_NAME }}
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - run: |
+            docker build -t ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }} ./API
+            docker push ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}
 
+       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
           cluster-name: EGClusterTest
           resource-group: DemoEG
-
-      - name: Build and push APP image
-        run: |
-          docker build -t ${{ env.ACR_URL }}/react-app:v_${{ github.run_number }} ./APP
-          docker push ${{ env.ACR_URL }}/react-app:v_${{ github.run_number }}
-
+          
       - uses: Azure/k8s-create-secret@v1
         with:
           container-registry-url: ${{ secrets.ACR_NAME }}
           container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
           container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
-          secret-name: myregistry-secret
-
-      - name: Update App Deployment YAML
-        run: |
-          sed -i "s|<IMAGE_TAG>|v_${{ github.run_number }}|g" manifests/app_deployment.yml
-
-      # - name: Deploy App to AKS
-      #   run: |
-      #     kubectl apply -f manifests/app_deployment.yml
+          secret-name: my-secret2
 
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
             manifests/app_deployment.yml
           images: |
-            ${{ env.ACR_URL }}/react-app:v_${{ github.run_number }}
+            ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}
           imagepullsecrets: |
-            myregistry-secret
+            my-secret2

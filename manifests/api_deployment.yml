@@ -19,11 +19,9 @@ spec:
         type: worker1
       containers:
         - name: api-container
-          image: myfirstcontainerdemo.azurecr.io/demok8sapi:<IMAGE_TAG>
+          image: myfirstcontainerdemo.azurecr.io/demok8sapi:v_${{github.run_number}}
           ports:
             - containerPort: 80
-      imagePullSecrets:
-        - name: myregistry-secret
 
 ---
 
