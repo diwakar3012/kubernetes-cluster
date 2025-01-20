@@ -65,7 +65,7 @@ jobs:
           username: ${{ secrets.AZURE_CLIENT_ID }}
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
       - run: |
-            docker build -t ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }} ./API
+            docker build -t ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }} ./APP
             docker push ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}
 
        # Set the target AKS cluster.
