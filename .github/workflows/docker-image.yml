@@ -10,8 +10,9 @@ jobs:
   build-and-push-api:
     if: >
       github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.commits.*.modified, ','), 'main/API') || 
-      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
+      contains(join(github.event.commits.*.modified, ','), 'API') || 
+      contains(join(github.event.commits.*.modified, ','), 'manifests')
+
     runs-on: ubuntu-latest
 
     steps:
@@ -53,8 +54,8 @@ jobs:
   build-and-push-app:
     if: >
       github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.commits.*.modified, ','), 'main/APP') || 
-      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
+      contains(join(github.event.commits.*.modified, ','), 'APP') || 
+      contains(join(github.event.commits.*.modified, ','), 'manifests')
 
     runs-on: ubuntu-latest
 
