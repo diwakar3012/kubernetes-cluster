@@ -1,18 +1,17 @@
 name: Build and Push Docker Images
 
 on:
-  workflow_dispatch :
+  workflow_dispatch:
   push:
     branches:
       - main
-    paths:
-      - main/APP/**
-      - main/API/**
-      - main/manifests/**
 
 jobs:
   build-and-push-api:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.commits.*.modified, 'main/api') || contains(github.event.commits.*.modified, 'main/manifests')
+    if: >
+      github.event_name == 'workflow_dispatch' || 
+      contains(join(github.event.commits.*.modified, ','), 'main/API') || 
+      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +51,11 @@ jobs:
             my-secret
 
   build-and-push-app:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.commits.*.modified, 'main/app') || contains(github.event.commits.*.modified, 'main/manifests')
+    if: >
+      github.event_name == 'workflow_dispatch' || 
+      contains(join(github.event.commits.*.modified, ','), 'main/APP') || 
+      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
+
     runs-on: ubuntu-latest
 
     steps:
