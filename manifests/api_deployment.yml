@@ -22,11 +22,11 @@ spec:
         - containerPort: 80
         resources:
           requests:
-            cpu: "1140m"
-            memory: "4328Mi"
+            cpu: "500m"       # reasonable CPU request
+            memory: "500Mi"  # base memory allocation to prevent over-provisioning
           limits:
-            cpu: "1520m"
-            memory: "5766Mi"
+            cpu: "1"          # CPU limit for this container
+            memory: "2Gi"     # memory limit to prevent excessive usage
 
 ---
 
@@ -59,15 +59,15 @@ spec:
   minReplicas: 1
   maxReplicas: 10
   metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 75
-    # - type: Resource
-    #   resource:
-    #     name: memory
-    #     target:
-    #       type: Utilization
-    #       averageUtilization: 85
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70  # scale based on 70% CPU utilization
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 75  # scale based on 75% memory utilization

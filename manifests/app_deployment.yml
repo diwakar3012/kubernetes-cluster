@@ -24,11 +24,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              cpu: "760m"
-              memory: "2884Mi"
+              cpu: "100m"      # lower CPU request
+              memory: "200Mi"  # lower memory request
             limits:
-              cpu: "1140m"
-              memory: "4328Mi"
+              cpu: "500m"
+              memory: "500Mi"  # lower memory limit to keep usage constrained
 
 ---
 
@@ -61,15 +61,15 @@ spec:
   minReplicas: 1
   maxReplicas: 5
   metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 75
-    # - type: Resource
-    #   resource:
-    #     name: memory
-    #     target:
-    #       type: Utilization
-    #       averageUtilization: 85
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70  # scale based on 70% CPU utilization
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 75  # scale based on 75% memory utilization
