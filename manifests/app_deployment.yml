@@ -24,11 +24,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              cpu: "200m"
-              memory: "256Mi"
+              cpu: "760m"
+              memory: "2884Mi"
             limits:
-              cpu: "400m"
-              memory: "512Mi"
+              cpu: "1140m"
+              memory: "4328Mi"
 
 ---
 
@@ -59,7 +59,7 @@ spec:
     kind: Deployment
     name: app-service
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 5
   metrics:
     - type: Resource
       resource:
@@ -67,9 +67,9 @@ spec:
         target:
           type: Utilization
           averageUtilization: 75
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 85
+    # - type: Resource
+    #   resource:
+    #     name: memory
+    #     target:
+    #       type: Utilization
+    #       averageUtilization: 85
