@@ -7,12 +7,23 @@ on:
       - main
 
 jobs:
+  debug-modified-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Event Payload
+        run: echo "${{ toJson(github.event) }}"
+
+      - name: Print Modified Files from All Commits
+        run: |
+          echo "Modified files in all commits:"
+          echo "${{ join(github.event.commits.*.modified || '', ',') }}"
+
   build-and-push-api:
     if: >
-      github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.head_commit.modified || github.event.commits.*.modified, ','), 'API') || 
-      contains(join(github.event.head_commit.modified || github.event.commits.*.modified, ','), 'manifests') || 
-      contains(join(github.event.head_commit.modified || github.event.commits.*.modified, ','), '.github/workflows')
+      github.event_name == 'workflow_dispatch' ||
+      contains(join(github.event.commits.*.modified || '', ','), 'API/') ||
+      contains(join(github.event.commits.*.modified || '', ','), 'manifests/') ||
+      contains(join(github.event.commits.*.modified || '', ','), '.github/workflows/')
 
     runs-on: ubuntu-latest
 
@@ -53,10 +64,10 @@ jobs:
 
   build-and-push-app:
     if: >
-      github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.head_commit.modified || github.event.commits.*.modified, ','), 'APP') || 
-      contains(join(github.event.head_commit.modified || github.event.commits.*.modified, ','), 'manifests') || 
-      contains(join(github.event.head_commit.modified || github.event.commits.*.modified, ','), '.github/workflows')
+      github.event_name == 'workflow_dispatch' ||
+      contains(join(github.event.commits.*.modified || '', ','), 'API/') ||
+      contains(join(github.event.commits.*.modified || '', ','), 'manifests/') ||
+      contains(join(github.event.commits.*.modified || '', ','), '.github/workflows/')
 
 
     runs-on: ubuntu-latest
