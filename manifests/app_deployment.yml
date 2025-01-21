@@ -15,8 +15,15 @@ spec:
       labels:
         app: app-service
     spec:
-      nodeSelector:
-        type: worker1
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: type
+                    operator: In
+                    values:
+                      - worker1
       containers:
         - name: app-container
           image: myfirstcontainerdemo.azurecr.io/react-app:v_${{github.run_number}}
@@ -29,7 +36,7 @@ spec:
             limits:
               cpu: "150m"        
               memory: "250Mi"  
-              
+
 ---
 
 # Expose
