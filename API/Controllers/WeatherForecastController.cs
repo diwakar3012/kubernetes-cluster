@@ -54,7 +54,7 @@ namespace DemoK8sAPI.Controllers
             var users_data =await UsersCollection.Find(filter1).ToListAsync();
             obj.data = users_data;
             obj.responseTime = DateTime.Now;
-            obj.status = "Success - 200";
+            obj.status = "Success-200";
             return obj;
 
         }
