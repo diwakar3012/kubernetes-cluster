@@ -7,26 +7,11 @@ on:
       - main
 
 jobs:
-  debug-modified-files:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Event Payload
-        run: echo "${{ toJson(github.event) }}"
-
-      - name: Print Modified Files from All Commits
-        run: |
-          echo "Modified files in all commits:"
-          echo "${{ join(github.event.commits.*.modified || '', ',') }}"
-
   build-and-push-api:
     if: >
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'push' && (
-        contains(join(github.event.head_commit.modified || '', ','), 'API/') ||
-        contains(join(github.event.head_commit.modified || '', ','), 'manifests/') ||
-        contains(join(github.event.head_commit.modified || '', ','), '.github/workflows/')
-      )
-
+      github.event_name == 'workflow_dispatch' || 
+      contains(join(github.event.commits.*.modified, ','), 'main/API') || 
+      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
     runs-on: ubuntu-latest
 
     steps:
@@ -42,6 +27,7 @@ jobs:
             docker build -t ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }} ./API
             docker push ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
 
+       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
@@ -66,12 +52,9 @@ jobs:
 
   build-and-push-app:
     if: >
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'push' && (
-        contains(join(github.event.head_commit.modified || '', ','), 'APP/') ||
-        contains(join(github.event.head_commit.modified || '', ','), 'manifests/') ||
-        contains(join(github.event.head_commit.modified || '', ','), '.github/workflows/')
-      )
+      github.event_name == 'workflow_dispatch' || 
+      contains(join(github.event.commits.*.modified, ','), 'main/APP') || 
+      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
 
     runs-on: ubuntu-latest
 
@@ -88,6 +71,7 @@ jobs:
             docker build -t ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }} ./APP
             docker push ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}
 
+       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
