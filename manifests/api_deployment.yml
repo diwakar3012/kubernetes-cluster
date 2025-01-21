@@ -22,11 +22,11 @@ spec:
         - containerPort: 80
         resources:
           requests:
-            cpu: "500m"       # reasonable CPU request
-            memory: "500Mi"  # base memory allocation to prevent over-provisioning
+            cpu: "100m"     
+            memory: "200Mi" 
           limits:
-            cpu: "1"          # CPU limit for this container
-            memory: "2Gi"     # memory limit to prevent excessive usage
+            cpu: "150m"        
+            memory: "250Mi"    
 
 ---
 
