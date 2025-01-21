@@ -15,16 +15,8 @@ spec:
       labels:
         app: api-service
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: type
-                    operator: In
-                    values:
-                      - worker1
-
+      nodeSelector:
+        type: worker1
       containers:
       - name: api-container
         image: myfirstcontainerdemo.azurecr.io/demok8sapi:v_${{github.run_number}}
@@ -32,11 +24,11 @@ spec:
         - containerPort: 80
         resources:
           requests:
-            cpu: "100m"     
-            memory: "200Mi" 
+            cpu: "250m"     
+            memory: "512Mi" 
           limits:
-            cpu: "150m"        
-            memory: "250Mi"    
+            cpu: "350m"        
+            memory: "600Mi"  
 
 ---
 
