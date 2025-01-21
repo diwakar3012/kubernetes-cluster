@@ -10,8 +10,9 @@ jobs:
   build-and-push-api:
     if: >
       github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.commits.*.modified, ','), 'API') || 
-      contains(join(github.event.commits.*.modified, ','), 'manifests')
+      contains(join(github.event.head_commit.modified, ','), 'API') || 
+      contains(join(github.event.head_commit.modified, ','), 'manifests') || 
+      contains(join(github.event.head_commit.modified, ','), '.github/workflows')
 
     runs-on: ubuntu-latest
 
@@ -28,7 +29,6 @@ jobs:
             docker build -t ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }} ./API
             docker push ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
 
-       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
@@ -54,8 +54,9 @@ jobs:
   build-and-push-app:
     if: >
       github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.commits.*.modified, ','), 'APP') || 
-      contains(join(github.event.commits.*.modified, ','), 'manifests')
+      contains(join(github.event.head_commit.modified, ','), 'APP') || 
+      contains(join(github.event.head_commit.modified, ','), 'manifests') || 
+      contains(join(github.event.head_commit.modified, ','), '.github/workflows')
 
     runs-on: ubuntu-latest
 
@@ -72,7 +73,6 @@ jobs:
             docker build -t ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }} ./APP
             docker push ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}
 
-       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
