@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - 'main/API/**'
-      - 'manifests/**'
+      - 'main/manifests/**'
 
 jobs: 
   build-and-push-api:

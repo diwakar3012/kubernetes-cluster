@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - 'main/APP/**'
-      - 'manifests/**'
+      - 'main/manifests/**'
 
 jobs:
 
