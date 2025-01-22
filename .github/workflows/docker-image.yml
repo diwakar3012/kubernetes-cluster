@@ -7,6 +7,21 @@ on:
       - main
 
 jobs:
+  # Job 1: Update Secrets in YAML
+  update-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Inject GitHub Actions secrets into secrets.yaml
+      - name: Update secrets.yaml with GitHub Secrets
+        run: |
+          # Replace placeholders in secrets.yaml with GitHub secrets
+          sed -i "s/{{SECRET_CONN_STRING}}/${{ secrets.CONN_STRING }}/g" manifests/secrets.yaml
+          sed -i "s/{{SECRET_DB_NAME}}/${{ secrets.DB_NAME }}/g" manifests/secrets.yaml
+          sed -i "s/{{SECRET_DB_PASSWORD}}/${{ secrets.DB_PASSWORD }}/g" manifests/secrets.yaml
+
   build-and-push-api:
     if: >
       github.event_name == 'workflow_dispatch' || 
@@ -44,6 +59,7 @@ jobs:
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
+            manifests/secrets.yaml
             manifests/api_deployment.yml
           images: |
             ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
@@ -88,6 +104,7 @@ jobs:
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
+            manifests/secrets.yaml
             manifests/app_deployment.yml
           images: |
             ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}

@@ -43,6 +43,7 @@ class App extends Component {
 
   handleRestart = () => {
     window.location.reload();
+    console.log(process.env.DB_NAME);
   };
 
   render() {
