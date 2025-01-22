@@ -13,6 +13,7 @@ class App extends Component {
   };
 
   handleIncrement = (counter) => {
+    console.log(process.env.DB_NAME);
     const counters = [...this.state.counters];
     const index = counters.indexOf(counter);
     counters[index] = { ...counters[index] };
@@ -43,7 +44,6 @@ class App extends Component {
 
   handleRestart = () => {
     window.location.reload();
-    console.log(process.env.DB_NAME);
   };
 
   render() {
