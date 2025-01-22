@@ -18,9 +18,9 @@ jobs:
       - name: Update secrets.yaml with GitHub Secrets
         run: |
           # Replace placeholders in secrets.yaml with GitHub secrets
-          sed -i "s/{{SECRET_CONN_STRING}}/${{ secrets.CONN_STRING }}/g" manifests/secrets.yaml
-          sed -i "s/{{SECRET_DB_NAME}}/${{ secrets.DB_NAME }}/g" manifests/secrets.yaml
-          sed -i "s/{{SECRET_DB_PASSWORD}}/${{ secrets.DB_PASSWORD }}/g" manifests/secrets.yaml
+          sed -i "s/{{SECRET_CONN_STRING}}/${{ secrets.CONN_STRING }}/g" manifests/secrets.yml
+          sed -i "s/{{SECRET_DB_NAME}}/${{ secrets.DB_NAME }}/g" manifests/secrets.yml
+          sed -i "s/{{SECRET_DB_PASSWORD}}/${{ secrets.DB_PASSWORD }}/g" manifests/secrets.yml
 
   build-and-push-api:
     if: >
