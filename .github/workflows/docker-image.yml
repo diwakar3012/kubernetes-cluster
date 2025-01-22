@@ -23,6 +23,7 @@ jobs:
           sed -i "s/{{SECRET_DB_PASSWORD}}/${{ secrets.DB_PASSWORD }}/g" manifests/secrets.yml
 
   build-and-push-api:
+    needs: update-secrets 
     if: >
       github.event_name == 'workflow_dispatch' || 
       contains(join(github.event.commits.*.modified, ','), 'main/API') || 
@@ -59,7 +60,7 @@ jobs:
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
-            manifests/secrets.yaml
+            manifests/secrets.yml
             manifests/api_deployment.yml
           images: |
             ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
@@ -67,6 +68,7 @@ jobs:
             my-secret
 
   build-and-push-app:
+    needs: update-secrets 
     if: >
       github.event_name == 'workflow_dispatch' || 
       contains(join(github.event.commits.*.modified, ','), 'main/APP') || 
@@ -104,7 +106,7 @@ jobs:
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
-            manifests/secrets.yaml
+            manifests/secrets.yml
             manifests/app_deployment.yml
           images: |
             ${{ secrets.ACR_NAME }}/react-app:v_${{ github.run_number }}
