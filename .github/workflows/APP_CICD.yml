@@ -1,14 +1,14 @@
 name: AKS APP DEPLOYMENT
 
 on:
-  workflow_dispatch:
+  # workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - 'APP/**'
       - 'manifests/**'
-      - '.github/'
+      - '.github/workflows/**'
 
 jobs:
 
