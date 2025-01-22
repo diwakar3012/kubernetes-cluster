@@ -14,13 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Inject GitHub Actions secrets into secrets.yaml with base64 encoding
-      - name: Update secrets.yaml with GitHub Secrets
+      # Inject GitHub Actions secrets into secrets.yml with base64 encoding
+      - name: Update secrets.yml with GitHub Secrets
         run: |
-          # Encode the secrets in base64 and replace placeholders in secrets.yaml
-          sed -i "s|{{SECRET_CONN_STRING}}|$(echo -n ${{ secrets.CONN_STRING }} | base64)|g" manifests/secrets.yaml
-          sed -i "s|{{SECRET_DB_NAME}}|$(echo -n ${{ secrets.DB_NAME }} | base64)|g" manifests/secrets.yaml
-          sed -i "s|{{SECRET_DB_PASSWORD}}|$(echo -n ${{ secrets.DB_PASSWORD }} | base64)|g" manifests/secrets.yaml
+          # Encode the secrets in base64 and replace placeholders in secrets.yml
+          sed -i "s|{{SECRET_CONN_STRING}}|$(echo -n ${{ secrets.CONN_STRING }} | base64)|g" manifests/secrets.yml
+          sed -i "s|{{SECRET_DB_NAME}}|$(echo -n ${{ secrets.DB_NAME }} | base64)|g" manifests/secrets.yml
+          sed -i "s|{{SECRET_DB_PASSWORD}}|$(echo -n ${{ secrets.DB_PASSWORD }} | base64)|g" manifests/secrets.yml
 
   build-and-push-api:
     needs: update-secrets 
