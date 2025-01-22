@@ -6,8 +6,9 @@ on:
     branches:
       - main
     paths:
-      - 'main/API/**'
-      - 'main/manifests/**'
+      - 'API/**'
+      - 'manifests/**'
+      - '.github/'
 
 jobs: 
   build-and-push-api:
