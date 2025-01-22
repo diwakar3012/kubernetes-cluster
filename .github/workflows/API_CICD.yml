@@ -1,15 +1,15 @@
-name: AKS API DEPLOYEMENT
+name: AKS APP DEPLOYMENT
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-    path:
-      - main/API
+    paths:
+      - 'main/API/**'
+      - 'manifests/**'
 
 jobs: 
-
   build-and-push-api:
     runs-on: ubuntu-latest
 

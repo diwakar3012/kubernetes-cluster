@@ -1,21 +1,17 @@
-name: AKS APP DEPLOYEMENT
+name: AKS APP DEPLOYMENT
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - main 
-    path:
-      - main/APP
+      - main
+    paths:
+      - 'main/APP/**'
+      - 'manifests/**'
 
 jobs:
 
   build-and-push-app:
-    if: >
-      github.event_name == 'workflow_dispatch' || 
-      contains(join(github.event.commits.*.modified, ','), 'main/APP') || 
-      contains(join(github.event.commits.*.modified, ','), 'main/manifests')
-
     runs-on: ubuntu-latest
 
     steps:
