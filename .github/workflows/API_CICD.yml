@@ -1,7 +1,6 @@
 name: AKS API DEPLOYMENT
 
 on:
-  # workflow_dispatch:
   push:
     branches:
       - main
@@ -9,6 +8,7 @@ on:
       - 'API/**'
       - 'manifests/**'
       - '.github/workflows/**'
+  workflow_dispatch:
 
 jobs: 
   build-and-push-api:

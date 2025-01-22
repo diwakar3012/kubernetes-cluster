@@ -1,7 +1,6 @@
 name: AKS APP DEPLOYMENT
 
 on:
-  # workflow_dispatch:
   push:
     branches:
       - main
@@ -9,9 +8,9 @@ on:
       - 'APP/**'
       - 'manifests/**'
       - '.github/workflows/**'
+  workflow_dispatch:
 
 jobs:
-
   build-and-push-app:
     runs-on: ubuntu-latest
 
