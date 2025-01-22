@@ -13,7 +13,6 @@ class App extends Component {
   };
 
   handleIncrement = (counter) => {
-    console.log(process.env.REACT_APP_CONNECTION);
     const counters = [...this.state.counters];
     const index = counters.indexOf(counter);
     counters[index] = { ...counters[index] };
