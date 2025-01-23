@@ -2,6 +2,7 @@ using EGDaySchedule.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System.Xml.Linq;
 
 namespace DemoK8sAPI.Controllers
 {
@@ -13,7 +14,7 @@ namespace DemoK8sAPI.Controllers
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
-
+        private readonly string SecretsPath =  "/mnt/secrets-store";
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IConfiguration _configuration;
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration)
@@ -57,6 +58,23 @@ namespace DemoK8sAPI.Controllers
 
             obj.status = "Success-200 " + Environment.GetEnvironmentVariable("DB_PASSWORD");
             return obj;
+        }
+
+        [HttpGet]
+        [Route("DoGetSecretFromKeyVault")]
+        //[Authorize]
+        public IActionResult DoGetSecretFromKeyVault()
+        {
+            string secretName = "DbName";
+            string secretFilePath = Path.Combine(SecretsPath, secretName);
+
+            if (!System.IO.File.Exists(secretFilePath))
+            {
+                return NotFound($"Secret DbName not found.");
+            }
+
+            string secretValue = System.IO.File.ReadAllText(secretFilePath);
+            return Ok(new { SecretName = secretName, SecretValue = secretValue });
         }
     }
 }
