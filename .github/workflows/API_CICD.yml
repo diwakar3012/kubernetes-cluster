@@ -53,6 +53,7 @@ jobs:
         with:
           manifests: |
             manifests/secrets.yml
+            manifests/azure_secret.yml
             manifests/api_deployment.yml
           images: |
             ${{ secrets.ACR_NAME }}/demok8sapi:v_${{ github.run_number }}
