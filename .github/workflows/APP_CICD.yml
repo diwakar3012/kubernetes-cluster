@@ -7,7 +7,7 @@ on:
     paths:
       - 'APP/**'
       - 'manifests/**'
-      - '.github/workflows/**'
+      - '.github/workflows/APP_CICD.yml'
   workflow_dispatch:
 
 jobs:
