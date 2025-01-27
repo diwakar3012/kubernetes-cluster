@@ -42,7 +42,6 @@ namespace DemoK8sAPI.Controllers
         {
             return DateTime.Now.ToString("dd-MMM-yyyy");
         }
-         
 
         [HttpGet]
         [Route("DoGetUserData")]
@@ -66,7 +65,7 @@ namespace DemoK8sAPI.Controllers
         //[Authorize]
         public IActionResult DoGetSecretFromKeyVault()
         {
-            string secretName = "dbname";
+            string secretName = "DbName";
             string secretFilePath = Path.Combine(SecretsPath, secretName);
 
             if (!System.IO.File.Exists(secretFilePath))
