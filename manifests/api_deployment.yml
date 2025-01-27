@@ -33,9 +33,9 @@ spec:
               cpu: "350m"        
               memory: "600Mi"  
           volumeMounts:
-              - name: secrets-store
-                mountPath: "/mnt/secrets-store"
-                readOnly: true
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       volumes:
         - name: secrets-store
           csi:
