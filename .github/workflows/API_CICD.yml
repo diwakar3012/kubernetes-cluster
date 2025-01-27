@@ -49,6 +49,13 @@ jobs:
           sed -i "s|{{SECRET_DB_NAME}}|$(echo -n ${{ secrets.DB_NAME }} | base64)|g" manifests/secrets.yml
           sed -i "s|{{SECRET_DB_PASSWORD}}|$(echo -n ${{ secrets.DB_PASSWORD }} | base64)|g" manifests/secrets.yml
 
+      - name: Update azure_secret.yml with GitHub Secrets
+        run: |
+          # Replace placeholders with the GitHub Secrets directly
+          sed -i "s|{{AZURE_CLIENTID}}|${{ secrets.AZURE_CLIENT_ID }}|g" manifests/azure_secret.yml
+          sed -i "s|{{AZURE_CLIENTSECRET}}|${{ secrets.AZURE_CLIENT_SECRET }}|g" manifests/azure_secret.yml
+          sed -i "s|{{AZURE_CLIENT_TENANT}}|${{ secrets.AZURE_TENANT_ID }}|g" manifests/azure_secret.yml
+
       - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
