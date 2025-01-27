@@ -1,5 +1,22 @@
 var builder = WebApplication.CreateBuilder(args);
 
+
+string secretsPath = "/mnt/secrets-store";
+
+// Example: Reading a specific secret
+string secretFileName = "dbname"; // Replace with your secret name
+string secretFilePath = Path.Combine(secretsPath, secretFileName);
+
+if (File.Exists(secretFilePath))
+{
+    string secretValue = File.ReadAllText(secretFilePath);
+    Console.WriteLine($"Secret Value for {secretFileName}: {secretValue}");
+}
+else
+{
+    Console.WriteLine($"Secret file {secretFileName} does not exist at path {secretsPath}.");
+}
+
 // Add services to the container.
 
 builder.Services.AddControllers();
